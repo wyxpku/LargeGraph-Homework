@@ -1,0 +1,26 @@
+doctype html
+html(lang='zh-CN')
+	head
+		meta(charset='utf-8')
+	body(style='text-align:center;background-color:#fbfbfb')
+		h2 注册
+		form(action='/account/signup', method='post')
+			p 邮箱：
+				input(type='email', name='email', required='required')
+			p 昵称：
+				input(type='text', name='name', required='required')
+			p 密码：
+				input(type='password', name='password', required='required')
+			p
+				input(type='submit', value='注册')
+		hr
+
+		h2 登录
+		form(action='/account/login', method='post')
+			p 邮箱：
+				input(type='email', name='email', required='required')
+			p 密码：
+				input(type='password', name='password')
+			p
+				input(type='submit', value='登录')
+

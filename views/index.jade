@@ -1,0 +1,20 @@
+doctype html
+html(lang='zh-CN')
+	head
+		meta(charset='utf-8')
+	body(style='text-align:center;background-color:#fbfbfb')
+		h2 个人信息
+		hr
+		table(border='1', align='center', valign='middle', style='word-break:break-all; word-wrap:break-word;')
+			tr
+				td Id
+				td 姓名
+				td 邮箱
+			tr
+				td {{.user.NodeIdentity}}
+				td {{.user.Properties.name}}
+				td {{.user.Properties.email}}
+
+		p
+			form(action='/account/logout', method='post')
+				input(type='submit', value='注销')

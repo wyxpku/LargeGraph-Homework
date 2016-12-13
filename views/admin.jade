@@ -1,0 +1,20 @@
+doctype html
+html(lang='zh-CN')
+	head
+		meta(charset='utf-8')
+	body(style='text-align:center;background-color:#fbfbfb')
+		h2 个人信息
+		hr
+		table(border='1', align='center', valign='middle', style='word-break:break-all; word-wrap:break-word;')
+			tr
+				td Id
+				td 姓名
+				td 邮箱
+				td 密码
+			| {{range .users}}
+			tr
+				td {{.NodeIdentity}}
+				td {{.Properties.name}}
+				td {{.Properties.email}}
+				td {{.Properties.password}}
+			| {{end}}
