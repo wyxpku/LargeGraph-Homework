@@ -3,6 +3,7 @@ package models
 import (
 	"errors"
 	"fmt"
+	"time"
 
 	bolt "github.com/johnnadratowski/golang-neo4j-bolt-driver"
 )
@@ -28,14 +29,16 @@ func AddUser(email, name, password string) error {
 		row.Close()
 	}
 
-	if result, err := conn.ExecNeo("CREATE (u:User {email:{email}, name:{name}, password:{password}}) RETURN ID(n)", map[string]interface{}{
+	now := time.Now().Format("2006-01-02 15:04:05")
+	if res, err := conn.ExecNeo("CREATE (u:User {email:{email}, name:{name}, password:{password}, time:{now}}) RETURN ID(u)", map[string]interface{}{
 		"email":    email,
 		"name":     name,
 		"password": password,
+		"now":      now,
 	}); err != nil {
-		fmt.Println(result.LastInsertId())
 		return err
 	} else {
+		fmt.Println(res)
 		return nil
 	}
 }
@@ -71,7 +74,6 @@ func GetUser(id int64) (user interface{}, err error) {
 	} else if ids, _, _ := row.NextNeo(); len(ids) == 0 {
 		return nil, errors.New("no such user with id")
 	} else {
-		fmt.Println(ids[0])
 		return ids[0], nil
 	}
 }
@@ -91,5 +93,42 @@ func GetUserAll() (users []interface{}, err error) {
 			users = append(users, d[0])
 		}
 		return users, nil
+	}
+}
+
+func GetUserMoment(id int64) (moments []interface{}, err error) {
+	conn, err := driver.OpenNeo("bolt://neo4j:610@localhost:7687")
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+
+	if data, _, _, err := conn.QueryNeoAll("MATCH (u:User)-[:Post]->(m) WHERE ID(u)={id} RETURN m", map[string]interface{}{"id": id}); err != nil {
+		return nil, err
+	} else {
+		moments = make([]interface{}, 0, len(data))
+		for _, d := range data {
+			moments = append(moments, d[0])
+		}
+		return moments, nil
+	}
+}
+
+func AddUserMoment(id int64, content string) error {
+	conn, err := driver.OpenNeo("bolt://neo4j:610@localhost:7687")
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+
+	now := time.Now().Format("2006-01-02 15:04:05")
+	if _, err := conn.ExecNeo("MATCH (u:User) WHERE ID(u)={id} CREATE (m:Moment {content:{content}, time:{time}}), (u)-[:Post]->(m)", map[string]interface{}{
+		"id":      id,
+		"content": content,
+		"time":    now,
+	}); err != nil {
+		return err
+	} else {
+		return nil
 	}
 }

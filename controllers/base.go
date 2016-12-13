@@ -23,6 +23,17 @@ func (c *BaseController) GetStringNotEmpty(name string) string {
 	return res
 }
 
+func (c *BaseController) GetId() int64 {
+	if c.paramErr != "" {
+		return -1
+	}
+	res, _ := c.GetInt64("id", -1)
+	if res == -1 {
+		c.paramErr = fmt.Sprintf("Invalid Id")
+	}
+	return res
+}
+
 func (c *BaseController) JsonSuccess() {
 	c.Data["json"] = map[string]bool{"success": true}
 	c.ServeJSON()

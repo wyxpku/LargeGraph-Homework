@@ -24,8 +24,11 @@ func (c *AccountController) SignUp() {
 	if err := models.AddUser(email, name, password); err != nil {
 		c.JsonError(err.Error())
 		return
+	} else if id, err := models.GetUserId(email, password); err != nil {
+		c.JsonError(err.Error())
+		return
 	} else {
-		// c.SetSession("userId", id)
+		c.SetSession("userId", id)
 		c.Redirect("/", 302)
 	}
 }

@@ -11,10 +11,13 @@ html(lang='zh-CN')
 				td 姓名
 				td 邮箱
 				td 密码
+				td 注册时间
 			| {{range .users}}
 			tr
 				td {{.NodeIdentity}}
-				td {{.Properties.name}}
+				td
+					a(href='/user?id={{.NodeIdentity}}', target='_blank') {{.Properties.name}}
 				td {{.Properties.email}}
 				td {{.Properties.password}}
+				td {{.Properties.time}}
 			| {{end}}
