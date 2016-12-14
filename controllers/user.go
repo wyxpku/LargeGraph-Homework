@@ -45,6 +45,7 @@ func (c *UserController) Get() {
 	c.Data["following"] = models.GetUserFollowing(userId)
 	c.Data["followed"] = models.GetUserFollowed(userId)
 	c.Data["isFollow"] = models.IsFollow(myId, userId)
+	c.Data["common"] = models.CommonFriend(myId, userId)
 	c.TplName = "user.html"
 }
 
@@ -145,4 +146,21 @@ func (c *UserController) RemoveFollow() {
 	} else {
 		c.Redirect(fmt.Sprintf("/user?id=%d", targetId), 302)
 	}
+}
+
+func (c *UserController) GetCommonFriend() {
+	var myId int64
+	if id := c.GetSession("userId"); id == nil {
+		c.Redirect("/account/", 302)
+	} else {
+		myId = id.(int64)
+	}
+	userId := c.GetId()
+	if c.paramErr != "" {
+		c.JsonError(c.paramErr)
+		return
+	}
+
+	c.Data["json"] = models.CommonFriend(myId, userId)
+	c.ServeJSON()
 }

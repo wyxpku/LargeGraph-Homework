@@ -237,12 +237,33 @@ func IsFollow(userId, targetId int64) bool {
 	}
 	defer conn.Close()
 
-	if data, _, _, err := conn.QueryNeoAll("MATCH (u:User)-[r:Follow*]->(t:User) WHERE ID(u)={userId} AND ID(t)={targetId} RETURN r", map[string]interface{}{
+	if data, _, _, err := conn.QueryNeoAll("MATCH (u:User)-[r:Follow]->(t:User) WHERE ID(u)={userId} AND ID(t)={targetId} RETURN r", map[string]interface{}{
 		"userId":   userId,
 		"targetId": targetId,
 	}); err != nil || len(data) == 0 {
 		return false
 	} else {
 		return true
+	}
+}
+
+func CommonFriend(userId, targetId int64) []interface{} {
+	conn, err := driver.OpenNeo("bolt://neo4j:610@localhost:7687")
+	if err != nil {
+		return nil
+	}
+	defer conn.Close()
+
+	if data, _, _, err := conn.QueryNeoAll("MATCH (u:User)-[:Follow]->(f:User)<-[:Follow]-(t:User) WHERE ID(u)={userId} AND ID(t)={targetId} RETURN f", map[string]interface{}{
+		"userId":   userId,
+		"targetId": targetId,
+	}); err != nil {
+		return nil
+	} else {
+		friends := make([]interface{}, 0, len(data))
+		for _, d := range data {
+			friends = append(friends, d[0])
+		}
+		return friends
 	}
 }

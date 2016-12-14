@@ -66,4 +66,9 @@ html(lang='zh-CN')
 		hr
 
 		h2 {{.user.Properties.name}} 与我的共同朋友
-
+		table(border='1', align='center', valign='middle', style='word-break:break-all; word-wrap:break-word;')
+			| {{range .common}}
+			tr
+				td
+					a(href='/user?id={{.NodeIdentity}}') {{.Properties.name}}
+			| {{end}}
