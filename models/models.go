@@ -2,7 +2,6 @@ package models
 
 import (
 	"errors"
-	"fmt"
 	"time"
 
 	bolt "github.com/johnnadratowski/golang-neo4j-bolt-driver"
@@ -30,7 +29,7 @@ func AddUser(email, name, password string) error {
 	}
 
 	now := time.Now().Format("2006-01-02 15:04:05")
-	if res, err := conn.ExecNeo("CREATE (u:User {email:{email}, name:{name}, password:{password}, time:{now}}) RETURN ID(u)", map[string]interface{}{
+	if _, err := conn.ExecNeo("CREATE (u:User {email:{email}, name:{name}, password:{password}, time:{now}}) RETURN ID(u)", map[string]interface{}{
 		"email":    email,
 		"name":     name,
 		"password": password,
@@ -38,7 +37,6 @@ func AddUser(email, name, password string) error {
 	}); err != nil {
 		return err
 	} else {
-		fmt.Println(res)
 		return nil
 	}
 }
