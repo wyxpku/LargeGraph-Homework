@@ -16,10 +16,13 @@ html(lang='zh-CN')
 				td {{.user.Properties.name}}
 				td {{.user.Properties.email}}
 				td {{.user.Properties.time}}
+		| {{if eq .isFollow false}}
 		form(action='/follow?id={{.user.NodeIdentity}}', method='post')
 			input(type='submit', value='去关注')
+		| {{else}}
 		form(action='/unfollow?id={{.user.NodeIdentity}}', method='post')
 			input(type='submit', value='取消关注')
+		| {{end}}
 		hr
 
 		h2 {{.user.Properties.name}} 关注的人
@@ -31,7 +34,7 @@ html(lang='zh-CN')
 			tr
 				td {{.NodeIdentity}}
 				td
-					a(href='/user?id={{.NodeIdentity}}', target='_blank') {{.Properties.name}}
+					a(href='/user?id={{.NodeIdentity}}') {{.Properties.name}}
 			| {{end}}
 		hr
 
@@ -44,11 +47,11 @@ html(lang='zh-CN')
 			tr
 				td {{.NodeIdentity}}
 				td
-					a(href='/user?id={{.NodeIdentity}}', target='_blank') {{.Properties.name}}
+					a(href='/user?id={{.NodeIdentity}}') {{.Properties.name}}
 			| {{end}}
 		hr
 
-		h2 动态
+		h2 {{.user.Properties.name}} 的动态
 		table(border='1', align='center', valign='middle', style='word-break:break-all; word-wrap:break-word;')
 			tr
 				td Id
@@ -60,4 +63,7 @@ html(lang='zh-CN')
 				td {{.Properties.content}}
 				td {{.Properties.time}}
 			| {{end}}
+		hr
+
+		h2 {{.user.Properties.name}} 与我的共同朋友
 

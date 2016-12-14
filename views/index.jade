@@ -14,7 +14,7 @@ html(lang='zh-CN')
 			tr
 				td {{.user.NodeIdentity}}
 				td
-					a(href='/user?id={{.user.NodeIdentity}}', target='_blank') {{.user.Properties.name}}
+					a(href='/user?id={{.user.NodeIdentity}}') {{.user.Properties.name}}
 				td {{.user.Properties.email}}
 				td {{.user.Properties.time}}
 
@@ -32,7 +32,7 @@ html(lang='zh-CN')
 			tr
 				td {{.NodeIdentity}}
 				td
-					a(href='/user?id={{.NodeIdentity}}', target='_blank') {{.Properties.name}}
+					a(href='/user?id={{.NodeIdentity}}') {{.Properties.name}}
 			| {{end}}
 		hr
 
@@ -45,7 +45,7 @@ html(lang='zh-CN')
 			tr
 				td {{.NodeIdentity}}
 				td
-					a(href='/user?id={{.NodeIdentity}}', target='_blank') {{.Properties.name}}
+					a(href='/user?id={{.NodeIdentity}}') {{.Properties.name}}
 			| {{end}}
 		hr
 
@@ -66,7 +66,7 @@ html(lang='zh-CN')
 			| {{range .friendMoment}}
 			tr
 				td
-					a(href='/user?id={{.friend.NodeIdentity}}', target='_blank') {{.friend.Properties.name}}
+					a(href='/user?id={{.friend.NodeIdentity}}') {{.friend.Properties.name}}
 				td {{.moment.Properties.content}}
 				td {{.moment.Properties.time}}
 			| {{end}}

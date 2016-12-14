@@ -229,3 +229,20 @@ func GetFriendMoment(id int64) []map[string]interface{} {
 		return res
 	}
 }
+
+func IsFollow(userId, targetId int64) bool {
+	conn, err := driver.OpenNeo("bolt://neo4j:610@localhost:7687")
+	if err != nil {
+		return false
+	}
+	defer conn.Close()
+
+	if data, _, _, err := conn.QueryNeoAll("MATCH (u:User)-[r:Follow*]->(t:User) WHERE ID(u)={userId} AND ID(t)={targetId} RETURN r", map[string]interface{}{
+		"userId":   userId,
+		"targetId": targetId,
+	}); err != nil || len(data) == 0 {
+		return false
+	} else {
+		return true
+	}
+}

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/user/LargeGraph-Homework/models"
 )
 
@@ -21,8 +22,11 @@ func (c *UserController) FriendMomentJson() {
 }
 
 func (c *UserController) Get() {
+	var myId int64
 	if id := c.GetSession("userId"); id == nil {
 		c.Redirect("/account/", 302)
+	} else {
+		myId = id.(int64)
 	}
 	userId := c.GetId()
 	if c.paramErr != "" {
@@ -40,6 +44,7 @@ func (c *UserController) Get() {
 	c.Data["moments"] = models.GetUserMoment(userId)
 	c.Data["following"] = models.GetUserFollowing(userId)
 	c.Data["followed"] = models.GetUserFollowed(userId)
+	c.Data["isFollow"] = models.IsFollow(myId, userId)
 	c.TplName = "user.html"
 }
 
@@ -118,7 +123,7 @@ func (c *UserController) AddFollow() {
 	if err := models.UserFollow(userId, targetId); err != nil {
 		c.JsonError(err.Error())
 	} else {
-		c.JsonSuccess()
+		c.Redirect(fmt.Sprintf("/user?id=%d", targetId), 302)
 	}
 }
 
@@ -138,6 +143,6 @@ func (c *UserController) RemoveFollow() {
 	if err := models.UserUnfollow(userId, targetId); err != nil {
 		c.JsonError(err.Error())
 	} else {
-		c.JsonSuccess()
+		c.Redirect(fmt.Sprintf("/user?id=%d", targetId), 302)
 	}
 }

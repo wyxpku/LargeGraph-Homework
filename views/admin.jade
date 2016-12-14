@@ -17,7 +17,7 @@ html(lang='zh-CN')
 			tr
 				td {{.NodeIdentity}}
 				td
-					a(href='/user?id={{.NodeIdentity}}', target='_blank') {{.Properties.name}}
+					a(href='/user?id={{.NodeIdentity}}') {{.Properties.name}}
 				td {{.Properties.email}}
 				td {{.Properties.password}}
 				td {{.Properties.time}}
