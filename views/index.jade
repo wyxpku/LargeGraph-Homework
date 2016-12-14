@@ -54,4 +54,19 @@ html(lang='zh-CN')
 				input(type='text', name='content', required='required')
 			p
 				input(type='submit', value='发送')
+		hr
+
+		h2 你的朋友的新鲜事
+		table(border='1', align='center', valign='middle', style='word-break:break-all; word-wrap:break-word;')
+			tr
+				td 朋友
+				td 新鲜事内容
+				td 发表时间
+			| {{range .friendMoment}}
+			tr
+				td
+					a(href='/user?id={{.friend.NodeIdentity}}', target='_blank') {{.friend.Properties.name}}
+				td {{.moment.Properties.content}}
+				td {{.moment.Properties.time}}
+			| {{end}}
 

@@ -208,3 +208,24 @@ func GetUserFollowed(id int64) []interface{} {
 		return users
 	}
 }
+
+func GetFriendMoment(id int64) []map[string]interface{} {
+	conn, err := driver.OpenNeo("bolt://neo4j:610@localhost:7687")
+	if err != nil {
+		return nil
+	}
+	defer conn.Close()
+
+	if data, _, _, err := conn.QueryNeoAll("MATCH (u:User)-[:Follow*0..1]->(f:User)-[:Post]->(m:Moment) WHERE ID(u)={id} RETURN f,m", map[string]interface{}{"id": id}); err != nil {
+		return nil
+	} else {
+		res := make([]map[string]interface{}, 0, len(data))
+		for _, d := range data {
+			res = append(res, map[string]interface{}{
+				"friend": d[0],
+				"moment": d[1],
+			})
+		}
+		return res
+	}
+}
