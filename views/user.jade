@@ -15,6 +15,10 @@ html(lang='zh-CN')
 				td {{.user.Properties.name}}
 				td {{.user.Properties.email}}
 				td {{.user.Properties.time}}
+		form(action='/follow?id={{.user.NodeIdentity}}', method='post')
+			input(type='submit', value='去关注')
+		form(action='/unfollow?id={{.user.NodeIdentity}}', method='post')
+			input(type='submit', value='取消关注')
 		hr
 
 		h2 动态

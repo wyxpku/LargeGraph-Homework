@@ -60,6 +60,8 @@ func (c *BaseController) Get() {
 		return
 	}
 	c.Data["user"] = user
+	c.Data["following"] = models.GetUserFollowing(userId)
+	c.Data["followed"] = models.GetUserFollowed(userId)
 	c.TplName = "index.html"
 }
 

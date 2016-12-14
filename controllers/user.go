@@ -52,3 +52,43 @@ func (c *UserController) AddMoment() {
 		c.Redirect("/", 302)
 	}
 }
+
+func (c *UserController) AddFollow() {
+	var userId int64
+	if id := c.GetSession("userId"); id == nil {
+		c.Redirect("/account", 302)
+	} else {
+		userId = id.(int64)
+	}
+	targetId := c.GetId()
+	if c.paramErr != "" {
+		c.JsonError(c.paramErr)
+		return
+	}
+
+	if err := models.UserFollow(userId, targetId); err != nil {
+		c.JsonError(err.Error())
+	} else {
+		c.JsonSuccess()
+	}
+}
+
+func (c *UserController) RemoveFollow() {
+	var userId int64
+	if id := c.GetSession("userId"); id == nil {
+		c.Redirect("/account", 302)
+	} else {
+		userId = id.(int64)
+	}
+	targetId := c.GetId()
+	if c.paramErr != "" {
+		c.JsonError(c.paramErr)
+		return
+	}
+
+	if err := models.UserUnfollow(userId, targetId); err != nil {
+		c.JsonError(err.Error())
+	} else {
+		c.JsonSuccess()
+	}
+}

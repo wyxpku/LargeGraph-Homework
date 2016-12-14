@@ -132,3 +132,79 @@ func AddUserMoment(id int64, content string) error {
 		return nil
 	}
 }
+
+func UserFollow(userId, targetId int64) error {
+	if userId == targetId {
+		return errors.New("Can't Follow Yourself")
+	}
+	conn, err := driver.OpenNeo("bolt://neo4j:610@localhost:7687")
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+
+	if _, err := conn.ExecNeo("MATCH (a:User),(b:User) WHERE ID(a)={id1} AND ID(b)={id2} CREATE UNIQUE (a)-[:Follow]->(b)", map[string]interface{}{
+		"id1": userId,
+		"id2": targetId,
+	}); err != nil {
+		return err
+	} else {
+		return nil
+	}
+}
+
+func UserUnfollow(userId, targetId int64) error {
+	if userId == targetId {
+		return errors.New("Can't Unfollow Yourself")
+	}
+	conn, err := driver.OpenNeo("bolt://neo4j:610@localhost:7687")
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+
+	if _, err := conn.ExecNeo("MATCH (a:User)-[r:Follow]->(b:User) WHERE ID(a)={id1} AND ID(b)={id2} DELETE r", map[string]interface{}{
+		"id1": userId,
+		"id2": targetId,
+	}); err != nil {
+		return err
+	} else {
+		return nil
+	}
+}
+
+func GetUserFollowing(id int64) []interface{} {
+	conn, err := driver.OpenNeo("bolt://neo4j:610@localhost:7687")
+	if err != nil {
+		return nil
+	}
+	defer conn.Close()
+
+	if data, _, _, err := conn.QueryNeoAll("MATCH (u:User)-[:Follow]->(a) WHERE ID(u)={id} RETURN a", map[string]interface{}{"id": id}); err != nil {
+		return nil
+	} else {
+		users := make([]interface{}, 0, len(data))
+		for _, d := range data {
+			users = append(users, d[0])
+		}
+		return users
+	}
+}
+
+func GetUserFollowed(id int64) []interface{} {
+	conn, err := driver.OpenNeo("bolt://neo4j:610@localhost:7687")
+	if err != nil {
+		return nil
+	}
+	defer conn.Close()
+
+	if data, _, _, err := conn.QueryNeoAll("MATCH (a:User)-[:Follow]->(u) WHERE ID(u)={id} RETURN a", map[string]interface{}{"id": id}); err != nil {
+		return nil
+	} else {
+		users := make([]interface{}, 0, len(data))
+		for _, d := range data {
+			users = append(users, d[0])
+		}
+		return users
+	}
+}

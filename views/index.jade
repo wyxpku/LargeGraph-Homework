@@ -22,6 +22,32 @@ html(lang='zh-CN')
 				input(type='submit', value='注销')
 		hr
 
+		h2 你关注的人
+		table(border='1', align='center', valign='middle', style='word-break:break-all; word-wrap:break-word;')
+			tr
+				td Id
+				td 姓名
+			| {{range .following}}
+			tr
+				td {{.NodeIdentity}}
+				td
+					a(href='/user?id={{.NodeIdentity}}', target='_blank') {{.Properties.name}}
+			| {{end}}
+		hr
+
+		h2 关注你的人
+		table(border='1', align='center', valign='middle', style='word-break:break-all; word-wrap:break-word;')
+			tr
+				td Id
+				td 姓名
+			| {{range .followed}}
+			tr
+				td {{.NodeIdentity}}
+				td
+					a(href='/user?id={{.NodeIdentity}}', target='_blank') {{.Properties.name}}
+			| {{end}}
+		hr
+
 		h2 发新鲜事
 		form(action='/moment', method='post')
 			p 内容
