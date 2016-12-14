@@ -3,7 +3,8 @@ html(lang='zh-CN')
 	head
 		meta(charset='utf-8')
 	body(style='text-align:center;background-color:#fbfbfb')
-		h2 个人信息
+		h2 我的主页
+		a(href='/admin', style='margin-left:400px; margin-bottom:100px') 去往所有人的大厅
 		table(border='1', align='center', valign='middle', style='word-break:break-all; word-wrap:break-word;')
 			tr
 				td Id
@@ -56,10 +57,10 @@ html(lang='zh-CN')
 				input(type='submit', value='发送')
 		hr
 
-		h2 你的朋友的新鲜事
+		h2 朋友圈
 		table(border='1', align='center', valign='middle', style='word-break:break-all; word-wrap:break-word;')
 			tr
-				td 朋友
+				td 发帖人
 				td 新鲜事内容
 				td 发表时间
 			| {{range .friendMoment}}

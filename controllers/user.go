@@ -8,6 +8,18 @@ type UserController struct {
 	BaseController
 }
 
+func (c *UserController) FriendMomentJson() {
+	var userId int64
+	if id := c.GetSession("userId"); id == nil {
+		c.Redirect("/account/", 302)
+	} else {
+		userId = id.(int64)
+	}
+
+	c.Data["json"] = models.GetFriendMoment(userId)
+	c.ServeJSON()
+}
+
 func (c *UserController) Get() {
 	if id := c.GetSession("userId"); id == nil {
 		c.Redirect("/account/", 302)
@@ -18,19 +30,56 @@ func (c *UserController) Get() {
 		return
 	}
 
-	if user, err := models.GetUser(userId); err != nil {
+	user, err := models.GetUser(userId)
+	if err != nil {
 		c.JsonError(err.Error())
 		return
-	} else {
-		c.Data["user"] = user
 	}
-	if moments, err := models.GetUserMoment(userId); err != nil {
-		c.JsonError(err.Error())
-		return
-	} else {
-		c.Data["moments"] = moments
-	}
+
+	c.Data["user"] = user
+	c.Data["moments"] = models.GetUserMoment(userId)
+	c.Data["following"] = models.GetUserFollowing(userId)
+	c.Data["followed"] = models.GetUserFollowed(userId)
 	c.TplName = "user.html"
+}
+
+func (c *UserController) GetUserMoment() {
+	if id := c.GetSession("userId"); id == nil {
+		c.Redirect("/account/", 302)
+	}
+	userId := c.GetId()
+	if c.paramErr != "" {
+		c.JsonError(c.paramErr)
+		return
+	}
+	c.Data["json"] = models.GetUserMoment(userId)
+	c.ServeJSON()
+}
+
+func (c *UserController) GetUserFollowing() {
+	if id := c.GetSession("userId"); id == nil {
+		c.Redirect("/account/", 302)
+	}
+	userId := c.GetId()
+	if c.paramErr != "" {
+		c.JsonError(c.paramErr)
+		return
+	}
+	c.Data["json"] = models.GetUserFollowing(userId)
+	c.ServeJSON()
+}
+
+func (c *UserController) GetUserFollowed() {
+	if id := c.GetSession("userId"); id == nil {
+		c.Redirect("/account/", 302)
+	}
+	userId := c.GetId()
+	if c.paramErr != "" {
+		c.JsonError(c.paramErr)
+		return
+	}
+	c.Data["json"] = models.GetUserFollowed(userId)
+	c.ServeJSON()
 }
 
 func (c *UserController) AddMoment() {

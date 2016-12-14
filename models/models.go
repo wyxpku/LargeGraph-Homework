@@ -96,21 +96,21 @@ func GetUserAll() (users []interface{}, err error) {
 	}
 }
 
-func GetUserMoment(id int64) (moments []interface{}, err error) {
+func GetUserMoment(id int64) []interface{} {
 	conn, err := driver.OpenNeo("bolt://neo4j:610@localhost:7687")
 	if err != nil {
-		return nil, err
+		return nil
 	}
 	defer conn.Close()
 
 	if data, _, _, err := conn.QueryNeoAll("MATCH (u:User)-[:Post]->(m) WHERE ID(u)={id} RETURN m", map[string]interface{}{"id": id}); err != nil {
-		return nil, err
+		return nil
 	} else {
-		moments = make([]interface{}, 0, len(data))
+		moments := make([]interface{}, 0, len(data))
 		for _, d := range data {
 			moments = append(moments, d[0])
 		}
-		return moments, nil
+		return moments
 	}
 }
 

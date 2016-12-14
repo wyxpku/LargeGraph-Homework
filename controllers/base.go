@@ -75,3 +75,13 @@ func (c *BaseController) Admin() {
 	c.Data["users"] = users
 	c.TplName = "admin.html"
 }
+
+func (c *BaseController) AdminJson() {
+	users, err := models.GetUserAll()
+	if err != nil {
+		c.JsonError(err.Error())
+		return
+	}
+	c.Data["json"] = users
+	c.ServeJSON()
+}

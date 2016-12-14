@@ -3,7 +3,8 @@ html(lang='zh-CN')
 	head
 		meta(charset='utf-8')
 	body(style='text-align:center;background-color:#fbfbfb')
-		h2 用户信息
+		h2 {{.user.Properties.name}} 的主页
+		a(href='/', style='margin-left:400px; margin-bottom:100px') 返回我的主页
 		table(border='1', align='center', valign='middle', style='word-break:break-all; word-wrap:break-word;')
 			tr
 				td Id
@@ -19,6 +20,32 @@ html(lang='zh-CN')
 			input(type='submit', value='去关注')
 		form(action='/unfollow?id={{.user.NodeIdentity}}', method='post')
 			input(type='submit', value='取消关注')
+		hr
+
+		h2 {{.user.Properties.name}} 关注的人
+		table(border='1', align='center', valign='middle', style='word-break:break-all; word-wrap:break-word;')
+			tr
+				td Id
+				td 姓名
+			| {{range .following}}
+			tr
+				td {{.NodeIdentity}}
+				td
+					a(href='/user?id={{.NodeIdentity}}', target='_blank') {{.Properties.name}}
+			| {{end}}
+		hr
+
+		h2 关注 {{.user.Properties.name}} 的人
+		table(border='1', align='center', valign='middle', style='word-break:break-all; word-wrap:break-word;')
+			tr
+				td Id
+				td 姓名
+			| {{range .followed}}
+			tr
+				td {{.NodeIdentity}}
+				td
+					a(href='/user?id={{.NodeIdentity}}', target='_blank') {{.Properties.name}}
+			| {{end}}
 		hr
 
 		h2 动态
