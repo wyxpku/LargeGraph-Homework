@@ -16,8 +16,9 @@ func (c *UserController) FriendMomentJson() {
 	} else {
 		userId = id.(int64)
 	}
+	bound := c.GetString("bound")
 
-	c.Data["json"] = models.GetFriendMoment(userId)
+	c.Data["json"] = models.GetFriendMoment(userId, bound)
 	c.ServeJSON()
 }
 
