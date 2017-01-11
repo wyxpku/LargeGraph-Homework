@@ -74,6 +74,26 @@ func (c *BaseController) Get() {
 	c.TplName = "index.html"
 }
 
+func (c *BaseController) GetUserJson() {
+	var userId int64
+	if id := c.GetSession("userId"); id == nil {
+		c.JsonError("No such user")
+		return
+	} else {
+		userId = id.(int64)
+	}
+	user, err := models.GetUser(userId)
+	if err != nil {
+		c.JsonError(err.Error())
+		return
+	}
+	c.Data["json"] = map[string]interface{}{
+		"user":    user,
+		"success": true,
+	}
+	c.ServeJSON()
+}
+
 func (c *BaseController) Admin() {
 	users, err := models.GetUserAll()
 	if err != nil {

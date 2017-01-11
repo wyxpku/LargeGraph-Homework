@@ -28,7 +28,7 @@ func (c *AccountController) SignUp() {
 		c.JsonError(err.Error())
 		return
 	} else {
-		// c.SetSession("userId", id)
+		c.SetSession("userId", id)
 		// c.Redirect("/", 302)
 		c.Data["json"] = map[string]interface{}{
 			"success": true,
@@ -50,7 +50,7 @@ func (c *AccountController) Login() {
 		c.JsonError(err.Error())
 		return
 	} else {
-		// c.SetSession("userId", id)
+		c.SetSession("userId", id)
 		// c.Redirect("/", 302)
 		c.Data["json"] = map[string]interface{}{
 			"success": true,
