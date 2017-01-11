@@ -29,12 +29,12 @@ func (c *AccountController) SignUp() {
 		return
 	} else {
 		c.SetSession("userId", id)
-		// c.Redirect("/", 302)
-		c.Data["json"] = map[string]interface{}{
-			"success": true,
-			"id":      id,
-		}
-		c.ServeJSON()
+		c.Redirect("/", 302)
+		// c.Data["json"] = map[string]interface{}{
+		// 	"success": true,
+		// 	"id":      id,
+		// }
+		// c.ServeJSON()
 	}
 }
 
@@ -51,12 +51,12 @@ func (c *AccountController) Login() {
 		return
 	} else {
 		c.SetSession("userId", id)
-		// c.Redirect("/", 302)
-		c.Data["json"] = map[string]interface{}{
-			"success": true,
-			"id":      id,
-		}
-		c.ServeJSON()
+		c.Redirect("/", 302)
+		// c.Data["json"] = map[string]interface{}{
+		// 	"success": true,
+		// 	"id":      id,
+		// }
+		// c.ServeJSON()
 	}
 }
 
