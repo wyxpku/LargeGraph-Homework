@@ -58,7 +58,7 @@ func (c *BaseController) JsonError(errStr string) {
 func (c *BaseController) Get() {
 	var userId int64
 	if id := c.GetSession("userId"); id == nil {
-		c.Redirect("/account/", 302)
+		c.Redirect("/login", 302)
 	} else {
 		userId = id.(int64)
 	}

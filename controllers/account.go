@@ -8,8 +8,12 @@ type AccountController struct {
 	BaseController
 }
 
-func (c *AccountController) Get() {
-	c.TplName = "account.html"
+func (c *AccountController) GetSignup() {
+	c.TplName = "signup.html"
+}
+
+func (c *AccountController) GetLogin() {
+	c.TplName = "login.html"
 }
 
 func (c *AccountController) SignUp() {
@@ -65,5 +69,5 @@ func (c *AccountController) Logout() {
 	if id != nil {
 		c.DelSession("userId")
 	}
-	c.Redirect("/account", 302)
+	c.Redirect("/login", 302)
 }

@@ -12,7 +12,7 @@ type UserController struct {
 func (c *UserController) FriendMomentJson() {
 	var userId int64
 	if id := c.GetSession("userId"); id == nil {
-		c.Redirect("/account/", 302)
+		c.Redirect("/login", 302)
 	} else {
 		userId = id.(int64)
 	}
@@ -25,7 +25,7 @@ func (c *UserController) FriendMomentJson() {
 func (c *UserController) Get() {
 	var myId int64
 	if id := c.GetSession("userId"); id == nil {
-		c.Redirect("/account/", 302)
+		c.Redirect("/login", 302)
 	} else {
 		myId = id.(int64)
 	}
@@ -52,7 +52,7 @@ func (c *UserController) Get() {
 
 func (c *UserController) GetUserMoment() {
 	if id := c.GetSession("userId"); id == nil {
-		c.Redirect("/account/", 302)
+		c.Redirect("/login", 302)
 	}
 	userId := c.GetId()
 	if c.paramErr != "" {
@@ -65,7 +65,7 @@ func (c *UserController) GetUserMoment() {
 
 func (c *UserController) GetUserFollowing() {
 	if id := c.GetSession("userId"); id == nil {
-		c.Redirect("/account/", 302)
+		c.Redirect("/login", 302)
 	}
 	userId := c.GetId()
 	if c.paramErr != "" {
@@ -78,7 +78,7 @@ func (c *UserController) GetUserFollowing() {
 
 func (c *UserController) GetUserFollowed() {
 	if id := c.GetSession("userId"); id == nil {
-		c.Redirect("/account/", 302)
+		c.Redirect("/login", 302)
 	}
 	userId := c.GetId()
 	if c.paramErr != "" {
@@ -92,7 +92,7 @@ func (c *UserController) GetUserFollowed() {
 func (c *UserController) AddMoment() {
 	var userId int64
 	if id := c.GetSession("userId"); id == nil {
-		c.Redirect("/account", 302)
+		c.Redirect("/login", 302)
 	} else {
 		userId = id.(int64)
 	}
@@ -112,7 +112,7 @@ func (c *UserController) AddMoment() {
 func (c *UserController) AddFollow() {
 	var userId int64
 	if id := c.GetSession("userId"); id == nil {
-		c.Redirect("/account", 302)
+		c.Redirect("/login", 302)
 	} else {
 		userId = id.(int64)
 	}
@@ -132,7 +132,7 @@ func (c *UserController) AddFollow() {
 func (c *UserController) RemoveFollow() {
 	var userId int64
 	if id := c.GetSession("userId"); id == nil {
-		c.Redirect("/account", 302)
+		c.Redirect("/login", 302)
 	} else {
 		userId = id.(int64)
 	}
@@ -152,7 +152,7 @@ func (c *UserController) RemoveFollow() {
 func (c *UserController) GetCommonFriend() {
 	var myId int64
 	if id := c.GetSession("userId"); id == nil {
-		c.Redirect("/account/", 302)
+		c.Redirect("/login", 302)
 	} else {
 		myId = id.(int64)
 	}
