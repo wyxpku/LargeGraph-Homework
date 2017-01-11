@@ -47,7 +47,7 @@
 				</div>
 				<div class="form-group">
 					<div class="col-sm-offset-5 col-sm-3">
-						<a class="btn btn-primary btn-lg" style="float: left;" onclick="login()">Log &nbsp;in</a>
+						<a type="submit" class="btn btn-primary btn-lg" style="float: left;">Log &nbsp;in</a>
 						<a class="btn btn-default btn-lg" style="float: right;" href="singup.html">Sign up</a>
 					</div>
 				</div>
@@ -58,45 +58,7 @@
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script type="text/javascript">
-		function login() {
-			// body...
-			// get login info
-			var email =  $("#email").val();
-			var password = $("#password").val();
-
-			$.post("http://10.2.211.110:8080/account/login",
-			{
-				"email": email,
-				"password": password,
-			}, function callback(data, status) {
-				if (status != "success") {
-					info("Log in error, please try later...", "danger");
-					return;
-				}
-				if (data.success){
-					// window.location.href="home.html";
-					console.log(data.success);
-
-				} else {
-					info(data.error, "danger");
-					return;
-				}
-			});
-			setTimeout("test()", 1000);
-		}
-		function test(){
-			$.ajax({
-				url: "http://10.2.211.110:8080/json",
-				type: 'GET',
-				dataType: 'json',
-				success: function(data){
-					console.log(data);
-				}
-			});
-		}
-		function info(str, type) {
-			$("#info").html('<div class="alert alert-'+type+'" role="alert">'+str+'</div>');
-		}
+		
 	</script>
 </body>
 </html>
