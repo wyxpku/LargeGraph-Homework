@@ -12,6 +12,14 @@ type BaseController struct {
 	paramErr string
 }
 
+func (c *BaseController) Prepare() {
+	c.Ctx.ResponseWriter.Header().Set("Access-Control-Allow-Origin", "*")                           //允许访问源
+	c.Ctx.ResponseWriter.Header().Set("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS")    //允许post访问
+	c.Ctx.ResponseWriter.Header().Set("Access-Control-Allow-Headers", "Content-Type,Authorization") //header的类型
+	c.Ctx.ResponseWriter.Header().Set("Access-Control-Max-Age", "1728000")
+	c.Ctx.ResponseWriter.Header().Set("Access-Control-Allow-Credentials", "true")
+}
+
 func (c *BaseController) GetStringNotEmpty(name string) string {
 	if c.paramErr != "" {
 		return ""
