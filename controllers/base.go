@@ -95,7 +95,12 @@ func (c *BaseController) GetUserJson() {
 }
 
 func (c *BaseController) Admin() {
-	users, err := models.GetUserAll()
+	var userId int64 = -1
+	if id := c.GetSession("userId"); id != nil {
+		userId = id.(int64)
+	}
+
+	users, err := models.GetUserAll(userId)
 	if err != nil {
 		c.JsonError(err.Error())
 		return
@@ -105,7 +110,12 @@ func (c *BaseController) Admin() {
 }
 
 func (c *BaseController) AdminJson() {
-	users, err := models.GetUserAll()
+	var userId int64 = -1
+	if id := c.GetSession("userId"); id != nil {
+		userId = id.(int64)
+	}
+
+	users, err := models.GetUserAll(userId)
 	if err != nil {
 		c.JsonError(err.Error())
 		return
