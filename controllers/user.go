@@ -50,6 +50,29 @@ func (c *UserController) Get() {
 	c.TplName = "user.html"
 }
 
+func (c *UserController) GetUserInfo() {
+	if id := c.GetSession("userId"); id == nil {
+		c.Redirect("/login", 302)
+	}
+	userId := c.GetId()
+	if c.paramErr != "" {
+		c.JsonError(c.paramErr)
+		return
+	}
+
+	user, err := models.GetUser(userId)
+	if err != nil {
+		c.JsonError(err.Error())
+		return
+	}
+
+	c.Data["json"] = map[string]interface{}{
+		"user":    user,
+		"success": true,
+	}
+	c.ServeJSON()
+}
+
 func (c *UserController) GetUserMoment() {
 	if id := c.GetSession("userId"); id == nil {
 		c.Redirect("/login", 302)
