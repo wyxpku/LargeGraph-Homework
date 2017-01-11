@@ -74,29 +74,25 @@
 					return;
 				}
 				if (data.success){
-					var cinfo = getUInfo(email);
-					setTimeout(function() {
-						console.log(cinfo);
-						window.location.href="home.html?curuid=" + cinfo[0] + "&name=" + cinfo[1];
-					}, 4000);
+					// window.location.href="home.html";
+					console.log(data.success);
+
 				} else {
 					info(data.error, "danger");
 					return;
 				}
 			});
+			setTimeout("test()", 1000);
 		}
-		function getUInfo(email) {
-			var id, name;
-			$.get("http://10.2.211.110:8080/admin/user", function(data, status) {
-				$.each(data, function func(i, item) {
-					if (item.Properties.email == email){
-						id = parseInt(item.NodeIdentity);
-						name = item.Properties.name;
-						// console.log(name);
-					}
-				})
-			})
-			return [id, name];
+		function test(){
+			$.ajax({
+				url: "http://10.2.211.110:8080/json",
+				type: 'GET',
+				dataType: 'json',
+				success: function(data){
+					console.log(data);
+				}
+			});
 		}
 		function info(str, type) {
 			$("#info").html('<div class="alert alert-'+type+'" role="alert">'+str+'</div>');

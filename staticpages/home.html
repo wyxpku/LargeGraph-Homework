@@ -22,10 +22,11 @@
 				<p style="text-align: center" id="uname">Username</p>
 				<br />
 
-				<ul class="nav nav-pills nav-stacked" role="tablist" style="text-align: center">
-				  <li role="presentation" class="active"><a href="#blogs" role="tab" data-toggle="pill">Blogs</a></li>
-				  <li role="presentation"><a href="#following" role="tab" data-toggle="pill">Following</a></li>
-				  <li role="presentation"><a href="#follower" role="tab" data-toggle="pill">Follower</a></li>
+				<ul class="nav nav-pills nav-stacked" role="tablist" style="text-align: center" id="mytab">
+				  <li role="presentation" class="active"><a href="#blogs" role="tab" data-toggle="pill" id="blogs-tab">Blogs</a></li>
+				  <li role="presentation"><a href="#following" role="tab" data-toggle="pill" id="following-tab">Following</a></li>
+				  <li role="presentation"><a href="#follower" role="tab" data-toggle="pill" id="follower-tab">Follower</a></li>
+				  <li role="presentation"><a href="#hall" role="tab" data-toggle="pill" id="hall-tab">Hall</a></li>
 				  <li role="presentation"><a href="#logout" role="tab" data-toggle="pill">Log out</a></li>
 				</ul>
 			</div>
@@ -111,6 +112,7 @@
 						</div>
 				  	</div>
 				  </div>
+				  <div role="tabpanel" class="tab-pane" id="hall">hall</div>
 				  <div role="tabpanel" class="tab-pane" id="logout">logout</div>
 				</div>
 			</div>
@@ -125,23 +127,40 @@
 		var uid;
 		var name;
 		$(document).ready(function(){
-			uid = parseInt(getUrlParam("curuid"));
-			name = getUrlParam("name");
-			setTimeout(function() {
-				// alert(uid);
-				$("#uimg").attr("href", "user.html?id=" + uid);
-				$("#uimg img").attr("src", "images/Fruit-" + (uid%20 + 1) + ".png");
-			}, 5000);
-		});
-		function getUrlParam(name) {
-            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
-            if (r != null) return unescape(r[2]); return null; //返回参数值
-        }
+				$.ajax({
+					url: "http://10.2.211.110:8080/json",
+					type: 'GET',
+					dataType: 'json',
+					success: function(data){
+						console.log(data);
+					}
+				});
+			}
+		);
 
-        $('#myTab a').click(function (e) {
-  			e.preventDefault()
- 			$(this).tab('show')
+        $('#blogs').click(function (e) {
+  			console.log("blogs");
+  			$.ajax({
+  				url:'http://10.2.211.110:8080/json',
+			    type:'GET', //GET
+			    dataType: 'json',
+			    success: function(data){
+			    	console.log(data);
+			    }
+  			});
+ 			$('#myTab a[href="#blogs-tab"]').tab('show');
+		});
+		$('#following').click(function (e) {
+  			console.log("following!");
+  			$('#myTab a[href="#following-tab"]').tab('show');
+		});
+		$('#follower').click(function (e) {
+  			console.log("follower!");
+  			$('#myTab a[href="#follower-tab"]').tab('show');
+		});
+		$('#hall').click(function (e) {
+  			console.log("hall");
+  			$('#myTab a[href="#hall-tab"]').tab('show');
 		});
 	</script>
 </body>

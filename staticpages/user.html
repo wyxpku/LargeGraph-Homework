@@ -4,43 +4,41 @@
 	<title>Mini Blog</title>
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<style type="text/css">
-			
+		.container{
+			background-color: #FFFAF0;
+		}	
 	</style>
 </head>
 <body>
 	<div class="container">
 		<div class="page-header">
-			<h1>Wellcome to <big>Mini Blog</big> !</h1>
+			<div style="width: 128px; margin: 0 auto;">
+				<img src="images/Fruit-1.png" width="100%" style="border-radius:50%;">
+			</div>
+			<br />
+			<h4 style="text-align: center">User Name  <span><button type="button" class="btn btn-danger">Unfollow</button></span></h4>
 		</div>
-		<br />
-		<h2 style="text-align: center;">Log in</h2>
-		<br />
-		<br />
-		<div class="row" class="input-panel">
-			<form class="form-horizontal" role="form" action="http://localhost:8080/account/login" method="post">
-				<div class="form-group">
-					<label for="email" class="col-sm-offset-4 col-sm-1 control-label">Email:</label>
-					<div class="col-sm-3">
-						<input type="email" class="form-control" name="email" id="email" placeholder="Email" required="required">
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="password" class="col-sm-offset-4 col-sm-1 control-label">Password:</label>
-					<div class="col-sm-3">
-						<input type="password" class="form-control" id="password" placeholder="Password" name="password" required="required">
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-sm-offset-5 col-sm-3">
-						<button type="submit" class="btn btn-primary btn-lg" style="float: left;">Log &nbsp;in</button>
-						<button type="submit" class="btn btn-default btn-lg" style="float: right;">Sign up</button>
-					</div>
-				</div>
-			</form>
+		<h3 style="text-align: center">CoFollowing</h3>
+		<div class="user-list row">
+			<div class="media col-md-offset-4 col-md-4" style="background-color: #CCCCCC;padding-top: 10px; padding-bottom: 10px;">
+				<a class="media-left media-middle" href="#">
+					<img src="images/Fruit-1.png" width="48px" height="48px" style="border-radius:50%;">
+			  	</a>
+			  	<div class="media-body" style="width: 100%">
+			    	<h4>Username<span><button type="button" class="btn btn-danger" style="float: right">Unfollow</button></span></4>
+			  	</div>
+			</div>
+
 		</div>
+		<h3 style="text-align: center">Following</h3>
+		<h3 style="text-align: center">Follower</h3>
 	</div>
 
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		var height = $(window).height();
+		$(".container").css("min-height", height);
+	</script>
 </body>
 </html>
