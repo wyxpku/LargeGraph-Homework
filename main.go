@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	beego.SetStaticPath("/images", "static/images")
+	beego.SetStaticPath("/images", "static/img")
 	beego.SetStaticPath("/css", "static/css")
 	beego.SetStaticPath("/js", "static/js")
 	beego.Run()
