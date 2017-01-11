@@ -16,10 +16,10 @@
 			<div class="col-md-2 affix mynav">
 				<h2 style="text-align: center; color: green; padding-bottom: 50px;">Mini Blog</h2>
 				<div style="width: 50%; margin: 0 auto;">
-					<img src="images/Fruit-1.png" width="100%" style="border-radius:50%;">
+					<a id="uimg"><img src="images/Fruit-1.png" width="100%" style="border-radius:50%;"></a>
 				</div>
 				<br />
-				<p style="text-align: center">Username</p>
+				<p style="text-align: center" id="uname">Username</p>
 				<br />
 
 				<ul class="nav nav-pills nav-stacked" role="tablist" style="text-align: center">
@@ -122,6 +122,27 @@
 		var height = $(window).height();
 		$(".mynav").height(height);
 		$(".mymain").css("min-height", height);
+		var uid;
+		var name;
+		$(document).ready(function(){
+			uid = parseInt(getUrlParam("curuid"));
+			name = getUrlParam("name");
+			setTimeout(function() {
+				// alert(uid);
+				$("#uimg").attr("href", "user.html?id=" + uid);
+				$("#uimg img").attr("src", "images/Fruit-" + (uid%20 + 1) + ".png");
+			}, 5000);
+		});
+		function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+            if (r != null) return unescape(r[2]); return null; //返回参数值
+        }
+
+        $('#myTab a').click(function (e) {
+  			e.preventDefault()
+ 			$(this).tab('show')
+		});
 	</script>
 </body>
 </html>

@@ -25,6 +25,9 @@
 			<h1>Wellcome to <big>Mini Blog</big> !</h1>
 		</div>
 		<br />
+		<div class="row">
+			<div id="info" class="col-md-6 col-md-offset-3"></div>
+		</div>
 		<h2 style="text-align: center;">Log in</h2>
 		<br />
 		<br />
@@ -61,26 +64,42 @@
 			var email =  $("#email").val();
 			var password = $("#password").val();
 
-			$.post("http://localhost:8080/account/login",
+			$.post("http://10.2.211.110:8080/account/login",
 			{
 				"email": email,
 				"password": password,
 			}, function callback(data, status) {
-				//alert(data.success);
-
+				if (status != "success") {
+					info("Log in error, please try later...", "danger");
+					return;
+				}
 				if (data.success){
-					alert(1);
+					var cinfo = getUInfo(email);
+					setTimeout(function() {
+						console.log(cinfo);
+						window.location.href="home.html?curuid=" + cinfo[0] + "&name=" + cinfo[1];
+					}, 4000);
 				} else {
-					alert(0);
+					info(data.error, "danger");
+					return;
 				}
 			});
 		}
-		function getUID(email) {
-			// body...
-			$.get("localhost:8080/admin/user", function callback(data, status) {
-				// body...
-				
+		function getUInfo(email) {
+			var id, name;
+			$.get("http://10.2.211.110:8080/admin/user", function(data, status) {
+				$.each(data, function func(i, item) {
+					if (item.Properties.email == email){
+						id = parseInt(item.NodeIdentity);
+						name = item.Properties.name;
+						// console.log(name);
+					}
+				})
 			})
+			return [id, name];
+		}
+		function info(str, type) {
+			$("#info").html('<div class="alert alert-'+type+'" role="alert">'+str+'</div>');
 		}
 	</script>
 </body>
