@@ -29,7 +29,7 @@
 		<br />
 		<br />
 		<div class="row" class="input-panel">
-			<form class="form-horizontal" role="form" action="http://localhost:8080/account/login" method="post">
+			<form class="form-horizontal" role="form">
 				<div class="form-group">
 					<label for="email" class="col-sm-offset-4 col-sm-1 control-label">Email:</label>
 					<div class="col-sm-3">
@@ -44,8 +44,8 @@
 				</div>
 				<div class="form-group">
 					<div class="col-sm-offset-5 col-sm-3">
-						<button type="submit" class="btn btn-primary btn-lg" style="float: left;">Log &nbsp;in</button>
-						<button type="submit" class="btn btn-default btn-lg" style="float: right;">Sign up</button>
+						<a class="btn btn-primary btn-lg" style="float: left;" onclick="login()">Log &nbsp;in</a>
+						<a class="btn btn-default btn-lg" style="float: right;" href="singup.html">Sign up</a>
 					</div>
 				</div>
 			</form>
@@ -54,5 +54,34 @@
 
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		function login() {
+			// body...
+			// get login info
+			var email =  $("#email").val();
+			var password = $("#password").val();
+
+			$.post("http://localhost:8080/account/login",
+			{
+				"email": email,
+				"password": password,
+			}, function callback(data, status) {
+				//alert(data.success);
+
+				if (data.success){
+					alert(1);
+				} else {
+					alert(0);
+				}
+			});
+		}
+		function getUID(email) {
+			// body...
+			$.get("localhost:8080/admin/user", function callback(data, status) {
+				// body...
+				
+			})
+		}
+	</script>
 </body>
 </html>
