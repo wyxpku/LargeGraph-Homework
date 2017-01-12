@@ -5,6 +5,7 @@ import (
 	"time"
 
 	bolt "github.com/johnnadratowski/golang-neo4j-bolt-driver"
+	"github.com/johnnadratowski/golang-neo4j-bolt-driver/structures/graph"
 )
 
 var driver bolt.Driver
@@ -76,7 +77,7 @@ func GetUser(id int64) (user interface{}, err error) {
 	}
 }
 
-func GetUserAll() (users []interface{}, err error) {
+func GetUserAll(myId int64) (users []interface{}, err error) {
 	conn, err := driver.OpenNeo("bolt://neo4j:610@localhost:7687")
 	if err != nil {
 		return nil, err
@@ -88,7 +89,10 @@ func GetUserAll() (users []interface{}, err error) {
 	} else {
 		users = make([]interface{}, 0, len(data))
 		for _, d := range data {
-			users = append(users, d[0])
+			u := d[0].(graph.Node)
+			u.Properties["I-Follow-Him"] = IsFollow(myId, u.NodeIdentity)
+			u.Properties["He-Follow-Me"] = IsFollow(u.NodeIdentity, myId)
+			users = append(users, u)
 		}
 		return users, nil
 	}
@@ -232,6 +236,9 @@ func GetFriendMoment(id int64, bound string) []map[string]interface{} {
 }
 
 func IsFollow(userId, targetId int64) bool {
+	if userId < 0 || targetId < 0 {
+		return false
+	}
 	conn, err := driver.OpenNeo("bolt://neo4j:610@localhost:7687")
 	if err != nil {
 		return false
