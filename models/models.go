@@ -90,8 +90,8 @@ func GetUserAll(myId int64) (users []interface{}, err error) {
 		users = make([]interface{}, 0, len(data))
 		for _, d := range data {
 			u := d[0].(graph.Node)
-			u.Properties["I-Follow-Him"] = IsFollow(myId, u.NodeIdentity)
-			u.Properties["He-Follow-Me"] = IsFollow(u.NodeIdentity, myId)
+			u.Properties["I_Follow_Him"] = IsFollow(myId, u.NodeIdentity)
+			u.Properties["He_Follow_Me"] = IsFollow(u.NodeIdentity, myId)
 			users = append(users, u)
 		}
 		return users, nil
