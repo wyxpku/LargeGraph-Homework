@@ -206,7 +206,13 @@
 				success: function(data){
 					$.each(data, function(i, item){
 						console.log(item);
-						var content = '<div class="media col-md-offset-2 col-md-6" style="background-color: #FFFFFF; padding-top: 10px; padding-bottom: 10px;"><a class="media-left media-middle" href="/user?id='+item.NodeIdentity+'"><img src="images/Fruit-' + (parseInt(item.NodeIdentity)%20 + 1) + '.png" width="48px" height="48px" style="border-radius:50%;"></a><div class="media-body" style="width: 100%"><h4>' + item.Properties.name + '<span><button class="btn btn-success" style="float: right" onclick="follow(this)"; value="' + item.NodeIdentity + '">Follow</button></span></h4></div></div>'
+						var content = '<div class="media col-md-offset-2 col-md-6" style="background-color: #FFFFFF; padding-top: 10px; padding-bottom: 10px;"><a class="media-left media-middle" href="/user?id='+item.NodeIdentity+'"><img src="images/Fruit-' + (parseInt(item.NodeIdentity)%20 + 1) + '.png" width="48px" height="48px" style="border-radius:50%;"></a><div class="media-body" style="width: 100%"><h4>' + item.Properties.name;
+						if (item.Properties.I_Follow_Him) {
+							content = content + '<span><button class="btn btn-danger" style="float: right" onclick="unfollow(this)"; value="' + item.NodeIdentity + '">Unfollow</button></span>';
+						} else {
+							content = content + '<span><button class="btn btn-success" style="float: right" onclick="follow(this)"; value="' + item.NodeIdentity + '">Follow</button></span>';
+						}
+						content = content + '</h4></div></div>';
 						$(".followerlist").append(content);
 					});
 				}
