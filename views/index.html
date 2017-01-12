@@ -156,7 +156,7 @@
 			    	console.log(data);
 			    	$.each(data, function(i, item){
 			    		// console.log(item);
-			    		var content = '<div class="media col-md-offset-2 col-md-6" style="background-color: #FFFFFF; padding-top: 10px; padding-bottom: 10px;"><a class="media-left media-middle" href="#"><img src="images/Fruit-'+item.html+'.png" width="48px" height="48px" style="border-radius:50%;"></a><div class="media-body" style="width: 100%"><h4>Username<span><button type="button" class="btn btn-danger" style="float: right">Unfollow</button></span></4></div></div>';
+			    		var content = '<div class="media col-md-offset-2 col-md-6" style="background-color: #FFFFFF; padding-top: 10px; padding-bottom: 10px;"><a class="media-left media-middle" href="#"><img src="images/Fruit-'+item.html+'.png" width="48px" height="48px" style="border-radius:50%;"></a><div class="media-body" style="width: 100%"><h4>Username<span><button type="button" class="btn btn-danger" style="float: right">Unfollow</button></span></h4></div></div>';
 			    		$(".followinglist").append(content);
 			    	});
 			    }
@@ -172,7 +172,17 @@
 			    	console.log(data);
 			    	$.each(data, function(i, item){
 			    		// console.log(item);
-			    		var content = '<div class="media col-md-offset-4 col-md-4" style="background-color: #FFFFFF; padding-top: 10px; padding-bottom: 10px;"><a class="media-left media-middle" href="/user?id='+item.NodeIdentity+'"><img src="images/Fruit-'+(parseInt(item.NodeIdentity)%2 + 1)+'.png" width="48px" height="48px" style="border-radius:50%;"></a><div class="media-body" style="width: 100%"><h4>'+item.Properties.name+'</h4></div></div>';
+			    		var content = '<div class="media col-md-offset-4 col-md-4" style="background-color: #FFFFFF; padding-top: 10px; padding-bottom: 10px;"><a class="media-left media-middle" href="/user?id='+item.NodeIdentity+'"><img src="images/Fruit-'+(parseInt(item.NodeIdentity)%2 + 1)+'.png" width="48px" height="48px" style="border-radius:50%;"></a><div class="media-body" style="width: 100%"><h4>'+item.Properties.name;
+			    		if (parseInt(item.NodeIdentity) != uid){
+			    			if (item.Properties.I_Follow_Him){
+			    				console.log(1);
+			    				content = content + '<span><a class="btn btn-danger" style="float: right" href="'+  +'"">Unfollow</a>';
+			    			} else {
+			    				console.log(0);
+			    			}
+			    		}
+			    		content = content+'</h4></div></div>';
+			    		
 			    		$(".halllist").append(content);
 			    	});
 			    }
