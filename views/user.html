@@ -10,28 +10,23 @@
 	</style>
 </head>
 <body>
-	<div class="container">
+	<div class="container" style="padding-bottom: 120px;">
 		<div class="page-header">
 			<div style="width: 128px; margin: 0 auto;">
-				<img src="images/Fruit-1.png" width="100%" style="border-radius:50%;">
+				<a href="/"><img src="images/Fruit-1.png" width="100%" style="border-radius:50%;" id="avator"></a>
 			</div>
 			<br />
-			<h4 style="text-align: center">User Name  <span><button type="button" class="btn btn-danger">Unfollow</button></span></h4>
+			<h4 style="text-align: center" id="name">&nbsp;&nbsp;&nbsp;<span><button type="button" class="btn btn-success" id="user-btn">Follow</button></span></h4>
 		</div>
-		<h3 style="text-align: center">CoFollowing</h3>
-		<div class="user-list row">
-			<div class="media col-md-offset-4 col-md-4" style="background-color: #CCCCCC;padding-top: 10px; padding-bottom: 10px;">
-				<a class="media-left media-middle" href="#">
-					<img src="images/Fruit-1.png" width="48px" height="48px" style="border-radius:50%;">
-			  	</a>
-			  	<div class="media-body" style="width: 100%">
-			    	<h4>Username<span><button type="button" class="btn btn-danger" style="float: right">Unfollow</button></span></4>
-			  	</div>
-			</div>
-
+		<h3 style="text-align: center">Moments</h3>
+		<div class="bloglist row">
 		</div>
+		<h3 style="text-align: center" id="confollow-label">ConFollowing</h3>
+		<div class="confollowlist row"></div>
 		<h3 style="text-align: center">Following</h3>
+		<div class="row followinglist"></div>
 		<h3 style="text-align: center">Follower</h3>
+		<div class="row followerlist"></div>
 	</div>
 
 	<script src="js/jquery.min.js"></script>
@@ -39,6 +34,214 @@
 	<script type="text/javascript">
 		var height = $(window).height();
 		$(".container").css("min-height", height);
+		function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+            if (r != null) return unescape(r[2]); return null; //返回参数值
+        }
+        var uid = getUrlParam("id");
+        var uname;
+        var loginID;
+        getLoginID();
+        setTimeout("loadMoments()", 300);
+        loadConFollow();
+        loadFollowing();
+        loadFollower();
+        $.ajax({
+        	url: '/user/info?id=' + uid,
+        	type: 'GET',
+        	dataType: 'json',
+        	success: function(data){
+        		// console.log(data);
+        		if (data.success){
+        			console.log(data);
+        			uname = data.user.Properties.name;
+	        		$('#name').prepend(data.user.Properties.name);
+	        		$("#user-btn").attr("value", uid);
+	        		$("#avator").attr("src", "/images/Fruit-" + (uid%20 + 1) + '.png')
+	        		if (data.I_Follow_Him) {
+	        			$("#user-btn").html("Unfollow");
+	        			$("#user-btn").attr("class", "btn btn-danger");
+	        			$("#user-btn").attr("onclick", "unfollow(this);")
+	        		} else {
+	        			$("#user-btn").html("Follow");
+	        			$("#user-btn").attr("class", "btn btn-success");
+	        			$("#user-btn").attr("onclick", "follow(this);")
+	        		}
+        		}
+        	},
+        });
+        
+        function getLoginID(){
+        	$.ajax({
+				url: "/json",
+				type: 'GET',
+				dataType: 'json',
+				success: function(data){
+					// console.log(data);
+					loginID = parseInt(data.user.NodeIdentity);
+					if (loginID == uid){
+						$("#user-btn").attr("disabled", "disabled");
+						$("#confollow-label").hide();
+						$(".confollowlist").hide();
+					}
+				}
+			});
+        }
+        function loadMoments(){
+        	$('.bloglist').html("");
+			$.ajax({
+  				url:'/user/moment?id='+uid,
+			    type:'GET', //GET
+			    dataType: 'json',
+			    success: function(data){
+			    	// console.log(data);
+			    	$.each(data, function(i, item){
+			    		console.log(item);
+			    		console.log(uname);
+			    		var content = '<div class="media col-md-offset-3 col-md-6" style="background-color: #FFFFFF; padding-top: 20px;"><a class="media-left media-top" href="/user?id='+uid+'"><img src="images/Fruit-'+(uid%20 + 1)+'.png" width="64px" height="64px" style="border-radius:50%;"></a><div class="media-body" style="width: 100%"><h4 class="media-heading" id="'+uid+'">'+uname+'</h4><p>'+item.Properties.time+'</p><p style="background-color: #f5f5f5; width: 100%; padding: 14px 20px;">'+item.Properties.content+'</p></div></div>';
+			    		$(".bloglist").append(content);
+			    	});
+			    }
+  			});
+        }
+        function loadFollowing(){
+        	$(".followinglist").html("");
+        	$.ajax({
+	        	url: '/user/following?id=' + uid,
+	        	type: 'GET',
+	        	dataType: 'json',
+	        	success: function(data){
+	        		// console.log(data);
+	        		// if (data.success){
+	        		// 	console.log(data.user.Properties.name);
+		        	// 	$('#name').prepend(data.user.Properties.name);
+	        		// }
+	        		$.each(data, function (i, item) {
+	        			// body...
+	        			console.log(item);
+	        			var content = '<div class="media col-md-offset-4 col-md-4" style="background-color: #CCCCCC;padding-top: 10px; padding-bottom: 10px;"><a class="media-left media-middle" href="/user?id='+item.NodeIdentity+'"><img src="images/Fruit-'+(parseInt(item.NodeIdentity)%20 + 1)+'.png" width="48px" height="48px" style="border-radius:50%;"></a><div class="media-body" style="width: 100%"><h4>' + item.Properties.name;
+	        			if (item.Properties.I_Follow_Him) {
+	        				content = content + '<span><button class="btn btn-danger" onclick="unfollow(this);" style="float: right" value="' + item.NodeIdentity + '">Unfollow</button></span>';
+	        			} else {
+	        				if (parseInt(item.NodeIdentity) == loginID){
+	        					content = content + '<span><button class="btn btn-success" onclick="follow(this);" style="float: right" disabled="disabled" value="' + item.NodeIdentity + '">Follow</button></span>';
+	        				} else {
+	        					content = content + '<span><button class="btn btn-danger" onclick="unfollow(this);" style="float: right" value="' + item.NodeIdentity + '">Unfollow</button></span>';
+	        				}
+	        			}
+	        			content  =content + '</h4></div></div>';
+	        			$(".followinglist").append(content);
+	        		})
+	        	},
+	        });
+        }
+        function loadConFollow(){
+        	$(".confollowlist").html("");
+        	$.ajax({
+	        	url: '/user/common?id=' + uid,
+	        	type: 'GET',
+	        	dataType: 'json',
+	        	success: function(data){
+	        		// console.log(data);
+	        		// if (data.success){
+	        		// 	console.log(data.user.Properties.name);
+		        	// 	$('#name').prepend(data.user.Properties.name);
+	        		// }
+	        		$.each(data, function (i, item) {
+	        			// body...
+	        			console.log(item);
+	        			var content = '<div class="media col-md-offset-4 col-md-4" style="background-color: #CCCCCC;padding-top: 10px; padding-bottom: 10px;"><a class="media-left media-middle" href="/user?id='+item.NodeIdentity+'"><img src="images/Fruit-'+(parseInt(item.NodeIdentity)%20 + 1)+'.png" width="48px" height="48px" style="border-radius:50%;"></a><div class="media-body" style="width: 100%"><h4>' + item.Properties.name;
+	        			if (item.Properties.I_Follow_Him) {
+	        				content = content + '<span><button class="btn btn-danger" onclick="unfollow(this);" style="float: right" value="' + item.NodeIdentity + '">Unfollow</button></span>';
+	        			} else {
+	        				if (parseInt(item.NodeIdentity) == loginID){
+	        					content = content + '<span><button class="btn btn-success" onclick="follow(this);" style="float: right" disabled="disabled" value="' + item.NodeIdentity + '">Follow</button></span>';
+	        				} else {
+	        					content = content + '<span><button class="btn btn-danger" onclick="unfollow(this);" style="float: right" value="' + item.NodeIdentity + '">Unfollow</button></span>';
+	        				}
+	        			}
+	        			content  =content + '</h4></div></div>';
+	        			$(".confollowlist").append(content);
+	        		})
+	        	},
+	        });
+        }
+        function loadFollower(){
+        	$(".followerlist").html("");
+        	$.ajax({
+	        	url: '/user/followed?id=' + uid,
+	        	type: 'GET',
+	        	dataType: 'json',
+	        	success: function(data){
+	        		// console.log(data);
+	        		// if (data.success){
+	        		// 	console.log(data.user.Properties.name);
+		        	// 	$('#name').prepend(data.user.Properties.name);
+	        		// }
+	        		$.each(data, function (i, item) {
+	        			// body...
+	        			// console.log(item);
+	        			var content = '<div class="media col-md-offset-4 col-md-4" style="background-color: #CCCCCC;padding-top: 10px; padding-bottom: 10px;"><a class="media-left media-middle" href="/user?id='+item.NodeIdentity+'"><img src="images/Fruit-'+(parseInt(item.NodeIdentity)%20 + 1)+'.png" width="48px" height="48px" style="border-radius:50%;"></a><div class="media-body" style="width: 100%"><h4>' + item.Properties.name;
+	        			if (item.Properties.I_Follow_Him) {
+	        				content = content + '<span><button class="btn btn-danger" onclick="unfollow(this);" style="float: right" value="' + item.NodeIdentity + '">Unfollow</button></span>';
+	        			} else {
+	        				if (parseInt(item.NodeIdentity) == loginID){
+	        					content = content + '<span><button class="btn btn-success" onclick="follow(this);" style="float: right" disabled="disabled" value="' + item.NodeIdentity + '">Follow</button></span>';
+	        				} else {
+	        					content = content + '<span><button class="btn btn-danger" onclick="unfollow(this);" style="float: right" value="' + item.NodeIdentity + '">Unfollow</button></span>';
+	        				}
+	        			}
+	        			content  =content + '</h4></div></div>';
+	        			$(".followerlist").append(content);
+	        		})
+	        	},
+	        });
+        }
+        function follow(which) {
+			// body...
+			// console.log("follow btn clicked!");
+			var cid = $(which).attr("value");
+
+			// console.log("Follow id:" + cid);
+			$.ajax({
+				url: "/follow",
+				type: "POST",
+				data: 'id=' + cid,
+				success: function(data){
+					// $(which).slideToggle();
+					// loadHall();
+					// console.log(data);
+					console.log("follow success:" + cid);
+					$(which).attr("class", "btn btn-danger");
+					$(which).attr("onclick", "unfollow(this)");
+					$(which).html("Unfollow");
+				}
+			});
+		}
+		function unfollow(which) {
+			// body...
+			// console.log("unfollow btn clicked!");
+			// console.log($(which).attr("class"));
+
+			var cid = $(which).attr("value");
+
+			// console.log("Unfollow id:" + cid);
+			$.ajax({
+				url: "/unfollow",
+				type: "POST",
+				data: 'id=' + cid,
+				success: function(data){
+					// $(which).slideToggle();
+					// loadHall();
+					// console.log(data);
+					console.log("unfollow success:" + cid);
+					$(which).attr("class", "btn btn-success");
+					$(which).attr("onclick", "follow(this)");
+					$(which).html("Follow");
+				}
+			});
+		}
 	</script>
 </body>
 </html>

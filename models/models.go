@@ -187,7 +187,10 @@ func GetUserFollowing(id int64) []interface{} {
 	} else {
 		users := make([]interface{}, 0, len(data))
 		for _, d := range data {
-			users = append(users, d[0])
+			u := d[0].(graph.Node)
+			u.Properties["I_Follow_Him"] = IsFollow(id, u.NodeIdentity)
+			u.Properties["He_Follow_Me"] = IsFollow(u.NodeIdentity, id)
+			users = append(users, u)
 		}
 		return users
 	}
@@ -205,7 +208,10 @@ func GetUserFollowed(id int64) []interface{} {
 	} else {
 		users := make([]interface{}, 0, len(data))
 		for _, d := range data {
-			users = append(users, d[0])
+			u := d[0].(graph.Node)
+			u.Properties["I_Follow_Him"] = IsFollow(id, u.NodeIdentity)
+			u.Properties["He_Follow_Me"] = IsFollow(u.NodeIdentity, id)
+			users = append(users, u)
 		}
 		return users
 	}
@@ -270,7 +276,10 @@ func CommonFriend(userId, targetId int64) []interface{} {
 	} else {
 		friends := make([]interface{}, 0, len(data))
 		for _, d := range data {
-			friends = append(friends, d[0])
+			u := d[0].(graph.Node)
+			u.Properties["I_Follow_Him"] = IsFollow(userId, u.NodeIdentity)
+			u.Properties["He_Follow_Me"] = IsFollow(u.NodeIdentity, userId)
+			friends = append(friends, u)
 		}
 		return friends
 	}

@@ -51,9 +51,12 @@ func (c *UserController) Get() {
 }
 
 func (c *UserController) GetUserInfo() {
+	var myId int64
 	if id := c.GetSession("userId"); id == nil {
 		c.Redirect("/login", 302)
-	}
+	} else {
+		myId = id.(int64)
+    }
 	userId := c.GetId()
 	if c.paramErr != "" {
 		c.JsonError(c.paramErr)
@@ -69,6 +72,8 @@ func (c *UserController) GetUserInfo() {
 	c.Data["json"] = map[string]interface{}{
 		"user":    user,
 		"success": true,
+        "I_Follow_Him": models.IsFollow(myId, userId),
+        "He_Follow_Me": models.IsFollow(userId, myId),
 	}
 	c.ServeJSON()
 }

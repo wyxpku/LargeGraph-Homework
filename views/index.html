@@ -27,61 +27,38 @@
 				  <li role="presentation"><a href="#following" role="tab" data-toggle="pill" id="following-tab">Following</a></li>
 				  <li role="presentation"><a href="#follower" role="tab" data-toggle="pill" id="follower-tab">Follower</a></li>
 				  <li role="presentation"><a href="#hall" role="tab" data-toggle="pill" id="hall-tab">Hall</a></li>
-				  <li role="presentation"><a href="#logout" role="tab" data-toggle="pill">Log out</a></li>
+				  <li role="presentation"><a href="#new" role="tab" data-toggle="pill" id="new-tab">New</a></li>
+				  <li role="presentation"><a href="#" role="tab" id="logout-tab">Log out</a></li>
 				</ul>
 			</div>
 			<div class="col-md-offset-2 col-md-10 mymain" style="background-color: #99CCFF;">
 				<div class="tab-content">
 				  <div role="tabpanel" class="tab-pane active" id="blogs">
-				  	<div class="bloglist row" style="padding-top: 100px; padding-bottom: 150px;">
-				  		
+				  	<div class="bloglist row" style="padding-top: 100px; padding-bottom: 150px;"></div>
+				  </div>
+				  
+				  <div role="tabpanel" class="tab-pane" id="new">
+				  	<div class="row" style="padding-top: 100px; padding-bottom: 150px;">
+				  		<form role="form" action="/moment" method="POST">
+						  <div class="form-group col-md-6 col-md-offset-3">
+						    <label for="name"><h2>New Moment</h2></label>
+						    <textarea class="form-control" rows="8" name="content"></textarea>
+						  </div>
+						  <div class="col-md-offset-3 col-md-3">
+						  	<button type="submit" class="btn btn-lg">Submit</button>
+						  </div>
+						</form>
 				  	</div>
 				  </div>
 				  <div role="tabpanel" class="tab-pane" id="following">
-				  	<div class="followinglist row" style="padding-top: 100px; padding-bottom: 150px;">
-				  	</div>
+				  	<div class="followinglist row" style="padding-top: 100px; padding-bottom: 150px;"></div>
 				  </div>
 				  <div role="tabpanel" class="tab-pane" id="follower">
-				  	<div class="follower-list row" style="padding-top: 100px; padding-bottom: 150px;">
-				  		<div class="media col-md-offset-2 col-md-6" style="background-color: #FFFFFF; padding-top: 10px; padding-bottom: 10px;">
-						  <a class="media-left media-middle" href="#">
-						    <img src="images/Fruit-1.png" width="48px" height="48px" style="border-radius:50%;">
-						  </a>
-						  <div class="media-body" style="width: 100%">
-						    <h4>Username<span><button type="button" class="btn btn-success" style="float: right">Follow</button></span></4>
-						  </div>
-						</div>
-						<div class="media col-md-offset-2 col-md-6" style="background-color: #FFFFFF; padding-top: 10px; padding-bottom: 10px;">
-						  <a class="media-left media-middle" href="#">
-						    <img src="images/Fruit-1.png" width="48px" height="48px" style="border-radius:50%;">
-						  </a>
-						  <div class="media-body" style="width: 100%">
-						    <h4>Username<span><button type="button" class="btn btn-success" style="float: right">Follow</button></span></4>
-						  </div>
-						</div>
-						<div class="media col-md-offset-2 col-md-6" style="background-color: #FFFFFF; padding-top: 10px; padding-bottom: 10px;">
-						  <a class="media-left media-middle" href="#">
-						    <img src="images/Fruit-1.png" width="48px" height="48px" style="border-radius:50%;">
-						  </a>
-						  <div class="media-body" style="width: 100%">
-						    <h4>Username<span><button type="button" class="btn btn-success" style="float: right">Follow</button></span></4>
-						  </div>
-						</div>
-						<div class="media col-md-offset-2 col-md-6" style="background-color: #FFFFFF; padding-top: 10px; padding-bottom: 10px;">
-						  <a class="media-left media-middle" href="#">
-						    <img src="images/Fruit-1.png" width="48px" height="48px" style="border-radius:50%;">
-						  </a>
-						  <div class="media-body" style="width: 100%">
-						    <h4>Username<span><button type="button" class="btn btn-success" style="float: right">Follow</button></span></4>
-						  </div>
-						</div>
-				  	</div>
+				  	<div class="followerlist row" style="padding-top: 100px; padding-bottom: 150px;"></div>
 				  </div>
 				  <div role="tabpanel" class="tab-pane" id="hall">
-				  	<div class="halllist row" style="padding-top: 100px; padding-bottom: 150px;">
-				  	</div>
+				  	<div class="halllist row" style="padding-top: 100px; padding-bottom: 150px;"></div>
 				  </div>
-				  <div role="tabpanel" class="tab-pane" id="logout">logout</div>
 				</div>
 			</div>
 		</div>
@@ -123,6 +100,7 @@
 		});
 		$('#follower-tab').click(function (e) {
   			console.log("follower!");
+  			loadFollower();
   			$('#myTab a[href="#follower-tab"]').tab('show');
 		});
 		$('#hall-tab').click(function (e) {
@@ -130,6 +108,62 @@
   			loadHall();
   			$('#myTab a[href="#hall-tab"]').tab('show');
 		});
+		$('#logout-tab').click(function (e) {
+			console.log("logout!");
+			$.ajax({
+				url: '/account/logout',
+				type: 'POST',
+				success: function (data) {
+					// body...
+					window.location = "/";
+				}
+			});
+		})
+
+		function follow(which) {
+			// body...
+			// console.log("follow btn clicked!");
+			var cid = $(which).attr("value");
+
+			// console.log("Follow id:" + cid);
+			$.ajax({
+				url: "/follow",
+				type: "POST",
+				data: 'id=' + cid,
+				success: function(data){
+					// $(which).slideToggle();
+					// loadHall();
+					// console.log(data);
+					console.log("follow success:" + cid);
+					$(which).attr("class", "btn btn-danger");
+					$(which).attr("onclick", "unfollow(this)");
+					$(which).html("Unfollow");
+				}
+			});
+		}
+		function unfollow(which) {
+			// body...
+			// console.log("unfollow btn clicked!");
+			// console.log($(which).attr("class"));
+
+			var cid = $(which).attr("value");
+
+			// console.log("Unfollow id:" + cid);
+			$.ajax({
+				url: "/unfollow",
+				type: "POST",
+				data: 'id=' + cid,
+				success: function(data){
+					// $(which).slideToggle();
+					// loadHall();
+					// console.log(data);
+					console.log("unfollow success:" + cid);
+					$(which).attr("class", "btn btn-success");
+					$(which).attr("onclick", "follow(this)");
+					$(which).html("Follow");
+				}
+			});
+		}
 		function loadMoments(){
 			$('.bloglist').html("");
 			$.ajax({
@@ -140,7 +174,7 @@
 			    	// console.log(data);
 			    	$.each(data, function(i, item){
 			    		// console.log(item);
-			    		var content = '<div class="media col-md-offset-2 col-md-6" style="background-color: #FFFFFF; padding-top: 20px;"><a class="media-left media-top" href="#"><img src="images/Fruit-'+(parseInt(item.friend.NodeIdentity)%2 + 1)+'.png" width="64px" height="64px" style="border-radius:50%;"></a><div class="media-body" style="width: 100%"><h4 class="media-heading" id="'+item.friend.Properties.name+'">Username</h4><p>'+item.moment.Properties.time+'</p><p style="background-color: #f5f5f5; width: 100%; padding: 14px 20px;">'+item.moment.Properties.content+'</p></div></div>';
+			    		var content = '<div class="media col-md-offset-2 col-md-6" style="background-color: #FFFFFF; padding-top: 20px;"><a class="media-left media-top" href="/user?id='+item.friend.NodeIdentity+'"><img src="images/Fruit-'+(parseInt(item.friend.NodeIdentity)%2 + 1)+'.png" width="64px" height="64px" style="border-radius:50%;"></a><div class="media-body" style="width: 100%"><h4 class="media-heading" id="'+item.friend.Properties.name+'">'+item.friend.Properties.name+'</h4><p>'+item.moment.Properties.time+'</p><p style="background-color: #f5f5f5; width: 100%; padding: 14px 20px;">'+item.moment.Properties.content+'</p></div></div>';
 			    		$(".bloglist").append(content);
 			    	});
 			    }
@@ -153,14 +187,30 @@
 			    type:'GET', //GET
 			    dataType: 'json',
 			    success: function(data){
-			    	console.log(data);
+			    	// console.log(data);
 			    	$.each(data, function(i, item){
-			    		// console.log(item);
-			    		var content = '<div class="media col-md-offset-2 col-md-6" style="background-color: #FFFFFF; padding-top: 10px; padding-bottom: 10px;"><a class="media-left media-middle" href="#"><img src="images/Fruit-'+item.html+'.png" width="48px" height="48px" style="border-radius:50%;"></a><div class="media-body" style="width: 100%"><h4>Username<span><button type="button" class="btn btn-danger" style="float: right">Unfollow</button></span></h4></div></div>';
+			    		console.log(item);
+			    		var content = '<div class="media col-md-offset-2 col-md-6" style="background-color: #FFFFFF; padding-top: 10px; padding-bottom: 10px;"><a class="media-left media-middle" href="/user?id='+item.NodeIdentity+'"><img src="images/Fruit-' + (parseInt(item.NodeIdentity)%20 + 1) + '.png" width="48px" height="48px" style="border-radius:50%;"></a><div class="media-body" style="width: 100%"><h4>' + item.Properties.name + '<span><button class="btn btn-danger" style="float: right" onclick="unfollow(this);" value="' + item.NodeIdentity +'">Unfollow</button></span></h4></div></div>';
+			    		// console.log(content);
 			    		$(".followinglist").append(content);
 			    	});
 			    }
   			});
+		}
+		function loadFollower(){
+			$(".followerlist").html("");
+			$.ajax({
+				url: "/user/followed?id=" + uid,
+				type: 'GET',
+				dataType: 'json',
+				success: function(data){
+					$.each(data, function(i, item){
+						console.log(item);
+						var content = '<div class="media col-md-offset-2 col-md-6" style="background-color: #FFFFFF; padding-top: 10px; padding-bottom: 10px;"><a class="media-left media-middle" href="/user?id='+item.NodeIdentity+'"><img src="images/Fruit-' + (parseInt(item.NodeIdentity)%20 + 1) + '.png" width="48px" height="48px" style="border-radius:50%;"></a><div class="media-body" style="width: 100%"><h4>' + item.Properties.name + '<span><button class="btn btn-success" style="float: right" onclick="follow(this)"; value="' + item.NodeIdentity + '">Follow</button></span></h4></div></div>'
+						$(".followerlist").append(content);
+					});
+				}
+			});
 		}
 		function loadHall(){
 			$(".halllist").html("");
@@ -173,16 +223,18 @@
 			    	$.each(data, function(i, item){
 			    		// console.log(item);
 			    		var content = '<div class="media col-md-offset-4 col-md-4" style="background-color: #FFFFFF; padding-top: 10px; padding-bottom: 10px;"><a class="media-left media-middle" href="/user?id='+item.NodeIdentity+'"><img src="images/Fruit-'+(parseInt(item.NodeIdentity)%2 + 1)+'.png" width="48px" height="48px" style="border-radius:50%;"></a><div class="media-body" style="width: 100%"><h4>'+item.Properties.name;
-			    		if (parseInt(item.NodeIdentity) != uid){
-			    			if (item.Properties.I_Follow_Him){
-			    				console.log(1);
-			    				content = content + '<span><a class="btn btn-danger" style="float: right" href="'+  +'"">Unfollow</a>';
-			    			} else {
-			    				console.log(0);
-			    			}
-			    		}
-			    		content = content+'</h4></div></div>';
+		    			if (item.Properties.I_Follow_Him){
+		    				console.log(1);
+		    				content = content + '<span><button class="btn btn-danger" style="float: right" onclick="unfollow(this);" value="'+ item.NodeIdentity +'">Unfollow</a>';
+		    			} else {
+		    				if (parseInt(item.NodeIdentity) != uid){
+		    					content = content + '<span><button class="btn btn-success" style="float: right" onclick="follow(this);" value="'+ item.NodeIdentity +'">Follow</button>';
+		    				}
+		    				console.log(0);
+		    			}
 			    		
+			    		content = content+'</h4></div></div>';
+			    		// console.log(content);
 			    		$(".halllist").append(content);
 			    	});
 			    }
